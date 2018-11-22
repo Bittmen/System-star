@@ -10,11 +10,13 @@
 .fancybox-nav span,
 .fancybox-tmp
 {
+	opacity: 0.9;
 	padding: 0;
 	margin: 0;
 	border: 0;
 	outline: none;
 	vertical-align: top;
+
 }
 
 .fancybox-wrap {
