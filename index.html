@@ -236,34 +236,75 @@
       </div>
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
-          <div class="cform" id="contact-form">
+          <div class="cform" id="contactForm">
             <div id="sendmessage">Tú mensaje ha sido enviado, ¡gracias!</div>
             <div id="errormessage"></div>
-            <form action="" method="post" class="contactForm">
+            <form id ="contact-form" name="contact-form" action="contactform.php" method="POST"  onsubmit="return validateForm()" >
 
-              <div class="field your-name form-group">
-                <input type="text" name="name" placeholder="Nombre" class="cform-text" size="40" data-rule="minlen:4" data-msg="Por favor introduzca al menos 4 carácteres">
-                <div class="validation"></div>
-              </div>
-              <div class="field your-email form-group">
-                <input type="text" name="email" placeholder=" Email" class="cform-text" size="40" data-rule="email" data-msg="Por favor usa un email válido ">
-                <div class="validation"></div>
-              </div>
-              <div class="field subject form-group">
-                <input type="text" name="subject" placeholder="Asunto" class="cform-text" size="40" data-rule="minlen:4" data-msg="Por favor introduzca al menos 8 carácteres">
-                <div class="validation"></div>
-              </div>
+              <!--Grid row-->
+              <div class="row">
 
-              <div class="field message form-group">
-                <textarea name="message" class="cform-textarea" cols="40" rows="10" data-rule="required" data-msg="Por favor escribe algo para nosotro :)"></textarea>
-                <div class="validation"></div>
-              </div>
+                  <!--Grid column-->
+                  <div class="col-md-6">
+                      <div class="md-form">
+                          <div class="md-form">
+                              <label for="name" class="">Tu nombre</label>
+                              <input type="text" id="name" name="name" class="form-control">
+                              
+                          </div>
+                      </div>
+                  </div>
+                  <!--Grid column-->
 
-              <div class="send-btn">
-                <input type="submit" value="Enviar mensaje" class="btn btn-theme">
-              </div>
+                  <!--Grid column-->
+                  <div class="col-md-6">
+                      <div class="md-form">
+                          <div class="md-form">
+                              <label for="email" class="">Tu correo</label>
+                              <input type="text" id="email" name="email" class="form-control">
+                              
+                          </div>
+                      </div>
+                  </div>
+                  <!--Grid column-->
 
-            </form>
+              </div>
+              <!--Grid row-->
+
+              <!--Grid row-->
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="md-form">
+                          <label for="subject" class="">Asunto</label>
+                          <input type="text" id="subject" name="subject" class="form-control">
+                          
+                      </div>
+                  </div>
+              </div>
+              <!--Grid row-->
+
+              <!--Grid row-->
+              <div class="row">
+
+                  <!--Grid column-->
+                  <div class="col-md-12">
+
+                      <div class="md-form">
+                          <label for="message">Tu mensaje</label>
+                          <textarea type="text" id="message" name="message" class="md-textarea" cols="70" rows="10" style="margin: 0px; height: 125px; width: 750px"; ></textarea>
+                          
+                      </div>
+
+                  </div>
+              </div>
+              <!--Grid row-->
+
+          </form>
+
+          <div class="send-btn">
+                <input value="Enviar mensaje" class="btn btn-theme" onclick="validateForm()">
+              </div> <div class="status" id="status"></div>
+      </div>
           </div>
         </div>
         <!-- ./span12 -->
@@ -317,8 +358,39 @@
   <script src="js/jquery.appear.js"></script>
   <script src="js/jquery.flexslider-min.js"></script>
 
-  <!-- Contact Form JavaScript File -->
-  <script src="contactform/contactform.js"></script>
+  <!-- Contact Form script -->
+  <script>
+  function validateForm() {
+    document.getElementById('status').innerHTML = "Sending...";
+    formData = {
+        'name'     : $('input[name=name]').val(),
+        'email'    : $('input[name=email]').val(),
+        'subject'  : $('input[name=subject]').val(),
+        'message'  : $('textarea[name=message]').val()
+    };
+
+
+   $.ajax({
+    url : "contactform.php",
+    type: "POST",
+    data : formData,
+    success: function(data, textStatus, jqXHR)
+    {
+
+        $('#status').text(data.message);
+        if (data.code) //If mail was sent successfully, reset the form.
+        $('#contactForm').closest('form').find("input[type=text], textarea").val("");
+    },
+    error: function (jqXHR, textStatus, errorThrown)
+    {
+        $('#status').text(jqXHR);
+    }
+});
+
+console.log(formData);
+
+}
+  </script>
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>
